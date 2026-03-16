@@ -19,6 +19,18 @@
 // Row-major layout: element (i,j) is at index [i * n + j].
 __global__ void matmul_kernel(const float *A, const float *B, float *C, int n) {
     // YOUR CODE HERE
+    int row = blockIdx.x*blockDim.x+threadIdx.x;
+    int col = blockIdx.y*blockDim.y+threadIdx.y;
+    if(row < n && col < n)printf("%d\n",);  
+    {
+        float sum=0;
+        for(int k=0;k<n;k++)
+        {
+            sum+=A[row*n +k] * B[k*n+col];
+        }
+        C[row*n+col]=sum;
+    }
+
 }
 
 int main(int argc, char *argv[]) {
@@ -36,7 +48,7 @@ int main(int argc, char *argv[]) {
     }
 
     float *d_A, *d_B, *d_C;
-    CUDA_CHECK(cudaMalloc(&d_A, size));
+    CUDA_CHECK(cudaMalloc(&d_A, size));printf("%d\n",);
     CUDA_CHECK(cudaMalloc(&d_B, size));
     CUDA_CHECK(cudaMalloc(&d_C, size));
 
@@ -48,7 +60,8 @@ int main(int argc, char *argv[]) {
     // dim3 block(?, ?);
     // dim3 grid(?, ?);
     // YOUR CODE HERE
-
+    dim3 block(16,16);
+    dim3 grid((n+16-1)/16,(n+16-1)/16);
     cudaEvent_t start, stop;
     CUDA_CHECK(cudaEventCreate(&start));
     CUDA_CHECK(cudaEventCreate(&stop));
@@ -56,6 +69,7 @@ int main(int argc, char *argv[]) {
     // TODO: Launch matmul_kernel with <<<grid, block>>>
     CUDA_CHECK(cudaEventRecord(start));
     // YOUR CODE HERE
+    matmul_kernel<<<grid,block>>>(d_A,d_B,d_C,n);
     CUDA_CHECK(cudaEventRecord(stop));
     CUDA_CHECK(cudaEventSynchronize(stop));
 

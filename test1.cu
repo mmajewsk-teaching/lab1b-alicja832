@@ -21,7 +21,7 @@ __global__ void matmul_kernel(const float *A, const float *B, float *C, int n) {
     // YOUR CODE HERE
     int row = blockIdx.x*blockDim.x+threadIdx.x;
     int col = blockIdx.y*blockDim.y+threadIdx.y;
-    if(row < n && col < n)printf("%d\n",);  
+    if(row < n && col < n) 
     {
         float sum=0;
         for(int k=0;k<n;k++)

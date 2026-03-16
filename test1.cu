@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     }
 
     float *d_A, *d_B, *d_C;
-    CUDA_CHECK(cudaMalloc(&d_A, size));printf("%d\n",);
+    CUDA_CHECK(cudaMalloc(&d_A, size));
     CUDA_CHECK(cudaMalloc(&d_B, size));
     CUDA_CHECK(cudaMalloc(&d_C, size));
 
